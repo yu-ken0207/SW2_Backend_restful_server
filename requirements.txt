@@ -1,0 +1,4 @@
+flask
+flasgger
+pandas
+flask_sqlalchemy

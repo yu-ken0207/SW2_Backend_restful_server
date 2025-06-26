@@ -1,0 +1,23 @@
+查看 SQLite 資料庫中的內容
+
+輸入以下命令來進入 SQLite 資料庫：
+sqlite3 users.db
+
+SELECT * FROM user;
+
+.exit
+
+另一種方式：
+安裝 DB Browser for SQLite：
+sudo apt install sqlitebrowser
+
+啟動 DB Browser for SQLite：
+sqlitebrowser
+
+
+
+
+
+Flasgger 沒有正確讀取到 API 的描述
+Flasgger 需要 API 路由包含對應的 docstring 來生成 Swagger 文件。
+需要確保每個 API 路由都有正確格式的 docstring 來描述接口。
