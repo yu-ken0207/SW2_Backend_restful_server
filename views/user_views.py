@@ -42,12 +42,19 @@ def create_user_route():
 
     if not name or not isinstance(age, int):
         return jsonify({"error": "Invalid input"}), 400
-
+    
+    if age < 0:
+        return jsonify({"error": "Invalid age: Age cannot be negative"}), 400
+    if age > 120:
+        return jsonify({"error": "Invalid age: Age is too large"}), 400
+    if age == 0:
+        return jsonify({"error": "Invalid age: Age cannot be zero"}), 400
+    
     user = create_user(name, age)
     if not user:
         return jsonify({"error": "User already exists"}), 400
 
-    return jsonify(user.to_dict()), 200
+    return jsonify(user), 200
 
 @user_bp.route('/user/<string:name>', methods=['DELETE'])
 def delete_user_route(name):
@@ -90,7 +97,7 @@ def list_users():
                 type: integer
     """
     users = get_all_users()
-    return jsonify([user.to_dict() for user in users]), 200
+    return jsonify(users), 200
 
 @user_bp.route('/users/upload_csv', methods=['POST'])
 def upload_csv():
@@ -127,9 +134,11 @@ def average_age():
             type: number
     """
     users = get_all_users()
-    df = pd.DataFrame([u.to_dict() for u in users])
+    df = pd.DataFrame(users)
     if df.empty:
         return jsonify({})
     df['group'] = df['name'].str[0].str.upper()
     result = df.groupby('group')['age'].mean().to_dict()
+    # 保留小數點後一位
+    result = {k: round(v, 1) for k, v in result.items()}
     return jsonify(result), 200

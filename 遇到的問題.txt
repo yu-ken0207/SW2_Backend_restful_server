@@ -39,7 +39,6 @@ sudo systemctl restart docker.socket docker.service
 建立 Docker 映像檔
     docker build -t restful-api .
 運行容器
-    docker run -p 5000:5000 -v $(pwd)/data:/app/data restful-api
     docker run -p 5000:5000 -v $(pwd):/app restful-api
 
 

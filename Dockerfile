@@ -1,6 +1,9 @@
 # 使用官方 Python 3.10.18 基底映像檔
 FROM python:3.10.18-slim
 
+# 安装 GCC 和其他
+RUN apt-get update && apt-get install -y gcc libsqlite3-dev
+
 # 設定工作目錄
 WORKDIR /app
 

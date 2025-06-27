@@ -1,11 +1,26 @@
-from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 
-db = SQLAlchemy()
+DATABASE = 'database.db'
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    age = db.Column(db.Integer, nullable=False)
+def get_db():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-    def to_dict(self):
-        return {"name": self.name, "age": self.age}
+def create_tables():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL,
+            age INTEGER NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+def to_dict(user):
+    return {"name": user['name'], "age": user['age']}
+
+create_tables()
