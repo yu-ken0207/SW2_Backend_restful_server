@@ -21,3 +21,33 @@ sqlitebrowser
 Flasgger 沒有正確讀取到 API 的描述
 Flasgger 需要 API 路由包含對應的 docstring 來生成 Swagger 文件。
 需要確保每個 API 路由都有正確格式的 docstring 來描述接口。
+
+
+
+
+docker 啟用時未成功創建資料表，或者資料庫檔案被遺失。
+使用資料卷（Volume）來持久化資料庫
+在 Docker 中使用資料卷來持久化資料庫，可以保證即使容器被刪除或重啟，資料庫資料仍然保留。
+在 Dockerfile 中不改變路徑設置，保持相對路徑配置。
+運行 Docker 容器時，使用 -v 參數來掛載資料卷：
+
+
+重新啟動 Docker 
+sudo systemctl restart docker.socket docker.service
+
+
+建立 Docker 映像檔
+    docker build -t restful-api .
+運行容器
+    docker run -p 5000:5000 -v $(pwd)/data:/app/data restful-api
+    docker run -p 5000:5000 -v $(pwd):/app restful-api
+
+
+列出所有本地镜像:
+docker images
+
+删除镜像
+docker rmi hello-world
+
+Docker 容器
+docker rm hello-world
