@@ -1,115 +1,112 @@
-# RESTful API 範例
+# RESTful API Example
 
-這個專案提供一個簡單的基於 Flask 的 RESTful API，允許使用者執行 CRUD 操作來管理使用者資料。此應用程式允許你：
+**English** | [繁體中文](README.zh-TW.md)
 
-- 創建一個新的使用者
-- 刪除已存在的使用者
-- 取得所有使用者的列表
-- 上傳 CSV 檔案批量創建使用者
-- 計算每個首字母群組的平均年齡
+A simple RESTful API built with Flask and SQLite for managing users. You can:
 
-## 快速開始
+- Create a user
+- Delete a user
+- List all users
+- Create many users at once by uploading a CSV file
+- Get the average age for each group of names that start with the same letter
 
-### 前置條件
+## Quick start
 
-需要安裝 Python 3.10 以上版本。建議使用虛擬環境來管理相依套件。
+### Prerequisites
 
-### 設定步驟
+Python 3.10 or later. A virtual environment is recommended.
 
-1. **建立虛擬環境（建議）**
+### Setup
+
+1. **Create a virtual environment (recommended)**
 
     ```bash
     conda create -n restful_server python=3.10
     conda activate restful_server
     ```
 
-2. **安裝所需的依賴套件**
-
-    透過 `requirements.txt` 安裝必要的 Python 套件：
+2. **Install the dependencies**
 
     ```bash
     pip install -r requirements.txt
     ```
 
-### 執行應用程式
+### Run
 
-1. **運行伺服器**
-
-    你可以在本地運行 Flask 應用程式，使用以下指令：
+1. **Run the server locally**
 
     ```bash
     python3 app.py
     ```
 
-    API 將會在 `http://127.0.0.1:5000` 可供訪問。
+    The API is available at `http://127.0.0.1:5000`, and the API docs (Swagger UI) at `http://127.0.0.1:5000/apidocs/`.
 
-2. **使用 Docker 運行應用程式**
+2. **Run with Docker**
 
-    若想在 Docker 容器中運行應用程式，可以按照以下步驟操作：
-
-    - **建構 Docker 映像檔：**
+    - **Build the image:**
 
       ```bash
       docker build -t restful-api .
       ```
 
-    - **運行 Docker 容器：**
+    - **Run the container:**
 
       ```bash
       docker run -p 5000:5000 -v $(pwd):/app restful-api
       ```
 
-    這樣應用程式將會在 `http://127.0.0.1:5000` 可供訪問。
+    The API is then available at `http://127.0.0.1:5000`.
 
-## API 端點
+## API endpoints
 
-### 1. **創建一個新的使用者**  
-   - **端點：** `POST /user`
-   - **參數：**
-     - `name`（字串，必填）
-     - `age`（整數，必填）
-   - **回應：**
-     - `200 OK` 表示成功創建
-     - `400 Bad Request` 表示輸入無效或使用者已存在
+### 1. **Create a user**
+   - **Endpoint:** `POST /user`
+   - **Parameters:**
+     - `name` (string, required)
+     - `age` (integer, required)
+   - **Responses:**
+     - `200 OK` when the user is created
+     - `400 Bad Request` when the input is invalid or the user already exists
 
-### 2. **刪除指定名稱的使用者**  
-   - **端點：** `DELETE /user/<string:name>`
-   - **參數：**
-     - `name`（字串，必填）– 要刪除的使用者名稱
-   - **回應：**
-     - `200 OK` 表示成功刪除
-     - `404 Not Found` 表示找不到使用者
+### 2. **Delete a user by name**
+   - **Endpoint:** `DELETE /user/<string:name>`
+   - **Parameters:**
+     - `name` (string, required): the user to delete
+   - **Responses:**
+     - `200 OK` when the user is deleted
+     - `404 Not Found` when the user doesn't exist
 
-### 3. **列出所有使用者**  
-   - **端點：** `GET /users`
-   - **回應：**
-     - `200 OK` 返回所有使用者的列表
+### 3. **List all users**
+   - **Endpoint:** `GET /users`
+   - **Responses:**
+     - `200 OK` with the list of users
 
-### 4. **上傳 CSV 檔案來批量新增使用者**  
-   - **端點：** `POST /users/upload_csv`
-   - **參數：**
-     - `file`（檔案，必填）– 包含 `name` 和 `age` 欄位的 CSV 檔案
-   - **回應：**
-     - `200 OK` 表示成功上傳並創建使用者
+### 4. **Create users from a CSV file**
+   - **Endpoint:** `POST /users/upload_csv`
+   - **Parameters:**
+     - `file` (file, required): a CSV file with `name` and `age` columns
+   - **Responses:**
+     - `200 OK` when the file is uploaded and the users are created
 
-### 5. **計算每個首字母群組的平均年齡**  
-   - **端點：** `GET /users/average-age`
-   - **回應：**
-     - `200 OK` 返回各群組的平均年齡
+### 5. **Average age by first letter**
+   - **Endpoint:** `GET /users/average-age`
+   - **Responses:**
+     - `200 OK` with the average age of each group
 
-## 專案結構
+## Project structure
 
 ```plaintext
 .
-├── app.py               # Flask 應用程式的主程式
-├── config.py            # 設定參數
-├── models/              # 資料庫模型和架構
+├── app.py               # Flask application entry point
+├── config.py            # settings
+├── models/              # database model and schema
 │   └── user.py
-├── services/            # 用戶操作的邏輯
+├── services/            # user operations
 │   └── user_service.py
-├── views/               # API 視圖/路由處理
+├── views/               # API routes
 │   └── user_views.py
-├── tests/               # 單元測試
+├── tests/               # unit tests
 │   └── test_app.py
-├── requirements.txt     # Python 相依套件
-└── Dockerfile           # 用於容器化應用程式的 Dockerfile
+├── requirements.txt     # Python dependencies
+└── Dockerfile           # container image
+```
